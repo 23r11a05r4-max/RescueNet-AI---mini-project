@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { api } from "../lib/api";
 import AlertFeed from "../components/AlertFeed";
 import StatsCards from "../components/StatsCards";
@@ -19,7 +19,7 @@ export default function Dashboard() {
   const [exec_, setExec] = useState(null);
   const nav = useNavigate();
 
-  const fetchAll = async () => {
+  const fetchAll = useCallback(async () => {
     try {
       const [o, d, g, t, e] = await Promise.all([
         api.get("/analytics/overview"),
@@ -29,14 +29,17 @@ export default function Dashboard() {
         api.get("/analytics/executive"),
       ]);
       setOverview(o.data); setDemo(d.data); setGeo(g.data); setTrends(t.data); setExec(e.data);
-    } catch (e) { toast.error("Failed to load analytics"); }
-  };
+    } catch (err) {
+      console.error("Failed to load analytics:", err);
+      toast.error("Failed to load analytics");
+    }
+  }, []);
 
   useEffect(() => {
     fetchAll();
     const t = setInterval(fetchAll, 15000);
     return () => clearInterval(t);
-  }, []);
+  }, [fetchAll]);
 
   return (
     <div className="mx-auto max-w-[1600px] px-6 py-6 space-y-6" data-testid="dashboard-root">

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { api, API } from "../lib/api";
 import { toast } from "sonner";
@@ -19,16 +19,19 @@ export default function InvestigationDetail() {
   const [alerts, setAlerts] = useState([]);
   const [newStatus, setNewStatus] = useState("");
 
-  const load = async () => {
+  const load = useCallback(async () => {
     try {
       const r = await api.get(`/investigations/${id}`);
       setInv(r.data);
       setNewStatus(r.data.status);
       const a = await api.get("/alerts", { params: { limit: 200 } });
       setAlerts(a.data.filter(x => x.investigation_id === id));
-    } catch { toast.error("Failed to load"); }
-  };
-  useEffect(() => { load(); }, [id]);
+    } catch (err) {
+      console.error("Failed to load investigation:", err);
+      toast.error("Failed to load");
+    }
+  }, [id]);
+  useEffect(() => { load(); }, [load]);
 
   const updateStatus = async () => {
     try {
@@ -129,7 +132,7 @@ export default function InvestigationDetail() {
             <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-1">AI Matches</div>
             <div className="space-y-2 mt-2">
               {inv.ai_matches?.length ? inv.ai_matches.map((m, i) => (
-                <div key={i} className="text-xs flex items-center justify-between border border-slate-800 rounded px-2 py-1.5">
+                <div key={`${m.cam}-${i}`} className="text-xs flex items-center justify-between border border-slate-800 rounded px-2 py-1.5">
                   <span className="font-mono text-slate-300">{m.cam}</span>
                   <span className="text-cyan-400 font-mono font-bold">{Math.round(m.score*100)}%</span>
                 </div>
@@ -140,7 +143,7 @@ export default function InvestigationDetail() {
             <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-1">CCTV Hits</div>
             <div className="space-y-2 mt-2">
               {inv.cctv_hits?.length ? inv.cctv_hits.map((c, i) => (
-                <div key={i} className="text-xs border border-slate-800 rounded px-2 py-1.5 font-mono text-slate-300">
+                <div key={`${c.cam}-${c.time}-${i}`} className="text-xs border border-slate-800 rounded px-2 py-1.5 font-mono text-slate-300">
                   {c.cam} · {new Date(c.time).toLocaleString()}
                 </div>
               )) : <div className="text-xs text-slate-500">No CCTV hits</div>}

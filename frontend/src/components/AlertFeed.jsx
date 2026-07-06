@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "../lib/api";
 import { Warning, Fire, Bell, CheckCircle } from "@phosphor-icons/react";
 import { toast } from "sonner";
@@ -32,7 +32,7 @@ export default function AlertFeed() {
   const [filter, setFilter] = useState("");
   const seenRef = useRef(new Set());
 
-  const fetchAlerts = async (initial=false) => {
+  const fetchAlerts = useCallback(async (initial = false) => {
     try {
       const r = await api.get("/alerts", { params: { limit: 30 } });
       const data = r.data;
@@ -49,20 +49,26 @@ export default function AlertFeed() {
       }
       data.forEach(a => seenRef.current.add(a.id));
       setAlerts(data);
-    } catch { /* ignore */ }
-  };
+    } catch (error) {
+      console.error("Failed to fetch alerts:", error);
+    }
+  }, []);
 
   useEffect(() => {
     let mounted = true;
     (async () => {
-      const r = await api.get("/alerts", { params: { limit: 30 } });
-      if (!mounted) return;
-      r.data.forEach(a => seenRef.current.add(a.id));
-      setAlerts(r.data);
+      try {
+        const r = await api.get("/alerts", { params: { limit: 30 } });
+        if (!mounted) return;
+        r.data.forEach(a => seenRef.current.add(a.id));
+        setAlerts(r.data);
+      } catch (error) {
+        console.error("Failed initial alert load:", error);
+      }
     })();
     const t = setInterval(() => fetchAlerts(false), 8000);
     return () => { mounted = false; clearInterval(t); };
-  }, []);
+  }, [fetchAlerts]);
 
   const shown = filter ? alerts.filter(a => a.priority === filter) : alerts;
 

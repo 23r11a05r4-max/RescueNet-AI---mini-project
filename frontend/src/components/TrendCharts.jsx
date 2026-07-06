@@ -1,5 +1,10 @@
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from "recharts";
 
+const TOOLTIP_STYLE = { background: "#020617", border: "1px solid #334155", borderRadius: 6, fontSize: 12 };
+const TOOLTIP_LABEL_STYLE = { color: "#94a3b8" };
+const LEGEND_WRAPPER_STYLE = { fontSize: 11 };
+const formatDate = (v) => v?.slice(5);
+
 export default function TrendCharts({ data }) {
   if (!data) return <div className="border border-slate-800 rounded-md bg-slate-900 p-6 text-xs text-slate-500 h-64">Loading trends…</div>;
   return (
@@ -24,10 +29,10 @@ export default function TrendCharts({ data }) {
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-            <XAxis dataKey="date" stroke="#475569" fontSize={10} tickLine={false} axisLine={false} tickFormatter={v => v?.slice(5)} />
+            <XAxis dataKey="date" stroke="#475569" fontSize={10} tickLine={false} axisLine={false} tickFormatter={formatDate} />
             <YAxis stroke="#475569" fontSize={10} tickLine={false} axisLine={false} />
-            <Tooltip contentStyle={{ background:"#020617", border:"1px solid #334155", borderRadius:6, fontSize:12 }} labelStyle={{ color: "#94a3b8" }} />
-            <Legend wrapperStyle={{ fontSize: 11 }} />
+            <Tooltip contentStyle={TOOLTIP_STYLE} labelStyle={TOOLTIP_LABEL_STYLE} />
+            <Legend wrapperStyle={LEGEND_WRAPPER_STYLE} />
             <Area type="monotone" dataKey="reported" stroke="#3b82f6" strokeWidth={2} fill="url(#rep)" />
             <Area type="monotone" dataKey="recovered" stroke="#10b981" strokeWidth={2} fill="url(#rec)" />
           </AreaChart>

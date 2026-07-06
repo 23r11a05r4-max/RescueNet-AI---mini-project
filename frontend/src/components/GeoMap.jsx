@@ -3,12 +3,21 @@ import { MapPin } from "@phosphor-icons/react";
 
 const priorityColor = { Critical: "#ef4444", High: "#f97316", Medium: "#f59e0b", Low: "#64748b" };
 const statusColor = { open: "#3b82f6", in_progress: "#f59e0b", recovered: "#10b981", closed: "#64748b" };
+const DEFAULT_CENTER = [20.5937, 78.9629];
+const HOTSPOT_PATH = { color: "#ef4444", fillColor: "#ef4444", fillOpacity: 0.15, weight: 1, dashArray: "4" };
+
+const buildPointPath = (status, priority) => ({
+  color: statusColor[status] || "#94a3b8",
+  fillColor: priorityColor[priority] || "#94a3b8",
+  fillOpacity: 0.7,
+  weight: 2,
+});
 
 export default function GeoMap({ data }) {
   if (!data) return <div className="border border-slate-800 rounded-md bg-slate-900 p-6 text-xs text-slate-500 h-96">Loading map…</div>;
 
   const points = data.points || [];
-  const center = points.length ? [points[0].lat, points[0].lng] : [20.5937, 78.9629];
+  const center = points.length ? [points[0].lat, points[0].lng] : DEFAULT_CENTER;
 
   return (
     <div className="border border-slate-800 rounded-md bg-slate-900 overflow-hidden" data-testid="geo-map">
@@ -36,16 +45,16 @@ export default function GeoMap({ data }) {
             />
             {points.map(p => (
               <CircleMarker key={p.id} center={[p.lat, p.lng]} radius={7}
-                pathOptions={{ color: statusColor[p.status]||"#94a3b8", fillColor: priorityColor[p.priority]||"#94a3b8", fillOpacity: 0.7, weight: 2 }}>
+                pathOptions={buildPointPath(p.status, p.priority)}>
                 <Popup>
                   <div className="text-xs font-medium">{p.name}</div>
                   <div className="text-[10px] uppercase tracking-wider text-slate-500 mt-1">{p.status} · {p.priority}</div>
                 </Popup>
               </CircleMarker>
             ))}
-            {data.hotspots?.slice(0, 6).map((h, i) => (
-              <CircleMarker key={`h${i}`} center={[h.lat, h.lng]} radius={Math.min(30, 10 + h.count * 4)}
-                pathOptions={{ color: "#ef4444", fillColor: "#ef4444", fillOpacity: 0.15, weight: 1, dashArray: "4" }} />
+            {data.hotspots?.slice(0, 6).map((h) => (
+              <CircleMarker key={`h-${h.lat}-${h.lng}`} center={[h.lat, h.lng]} radius={Math.min(30, 10 + h.count * 4)}
+                pathOptions={HOTSPOT_PATH} />
             ))}
           </MapContainer>
         </div>

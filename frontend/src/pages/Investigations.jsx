@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { api } from "../lib/api";
 import { toast } from "sonner";
@@ -86,11 +86,11 @@ export default function Investigations() {
   const [showNew, setShowNew] = useState(sp.get("new") === "1");
   const navigate = useNavigate();
 
-  const load = async () => {
+  const load = useCallback(async () => {
     const r = await api.get("/investigations", { params: status ? { status } : {} });
     setItems(r.data);
-  };
-  useEffect(() => { load(); }, [status]);
+  }, [status]);
+  useEffect(() => { load(); }, [load]);
 
   const done = () => { setShowNew(false); sp.delete("new"); setSp(sp); load(); };
 

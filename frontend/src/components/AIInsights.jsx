@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { api } from "../lib/api";
 import { Sparkle, ArrowClockwise } from "@phosphor-icons/react";
 
@@ -12,14 +12,14 @@ export default function AIInsights() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const load = async (force=false) => {
+  const load = useCallback(async (force = false) => {
     setLoading(true);
     try {
       const r = await api.get("/ai/insights", { params: force ? { t: Date.now() } : {} });
       setData(r.data);
     } finally { setLoading(false); }
-  };
-  useEffect(() => { load(); }, []);
+  }, []);
+  useEffect(() => { load(); }, [load]);
 
   return (
     <div className="border border-cyan-500/30 rounded-md bg-slate-950 ai-glow" data-testid="ai-insights">

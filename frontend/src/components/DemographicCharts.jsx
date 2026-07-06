@@ -1,6 +1,9 @@
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell, PieChart, Pie, Tooltip } from "recharts";
 
 const COLORS = ["#3b82f6", "#22d3ee", "#f59e0b", "#10b981", "#a855f7", "#ef4444", "#6366f1"];
+const BAR_RADIUS = [3, 3, 0, 0];
+const SMALL_BAR_RADIUS = [2, 2, 0, 0];
+const CHART_CURSOR = { fill: "rgba(59,130,246,0.08)" };
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
@@ -43,9 +46,9 @@ export default function DemographicCharts({ data }) {
             <BarChart data={data.by_age}>
               <XAxis dataKey="bucket" stroke="#475569" fontSize={10} tickLine={false} axisLine={false} />
               <YAxis stroke="#475569" fontSize={10} tickLine={false} axisLine={false} />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(59,130,246,0.08)" }} />
-              <Bar dataKey="count" radius={[3,3,0,0]}>
-                {data.by_age.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+              <Tooltip content={<CustomTooltip />} cursor={CHART_CURSOR} />
+              <Bar dataKey="count" radius={BAR_RADIUS}>
+                {data.by_age.map((d, i) => <Cell key={`age-${d.bucket}`} fill={COLORS[i % COLORS.length]} />)}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
@@ -55,7 +58,7 @@ export default function DemographicCharts({ data }) {
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie data={genderData} dataKey="count" nameKey="name" innerRadius={30} outerRadius={60} paddingAngle={2}>
-                {genderData.map((_, i) => <Cell key={i} fill={COLORS[i]} stroke="#020617" strokeWidth={2} />)}
+                {genderData.map((g, i) => <Cell key={`gender-${g.name}`} fill={COLORS[i]} stroke="#020617" strokeWidth={2} />)}
               </Pie>
               <Tooltip content={<CustomTooltip />} />
             </PieChart>
@@ -67,8 +70,8 @@ export default function DemographicCharts({ data }) {
             <BarChart data={data.by_dow}>
               <XAxis dataKey="day" stroke="#475569" fontSize={10} tickLine={false} axisLine={false} />
               <YAxis stroke="#475569" fontSize={10} tickLine={false} axisLine={false} />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(59,130,246,0.08)" }} />
-              <Bar dataKey="count" fill="#22d3ee" radius={[3,3,0,0]} />
+              <Tooltip content={<CustomTooltip />} cursor={CHART_CURSOR} />
+              <Bar dataKey="count" fill="#22d3ee" radius={BAR_RADIUS} />
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -89,8 +92,8 @@ export default function DemographicCharts({ data }) {
             <BarChart data={data.by_month}>
               <XAxis dataKey="month" stroke="#475569" fontSize={10} tickLine={false} axisLine={false} />
               <YAxis stroke="#475569" fontSize={10} tickLine={false} axisLine={false} />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(59,130,246,0.08)" }} />
-              <Bar dataKey="count" fill="#10b981" radius={[3,3,0,0]} />
+              <Tooltip content={<CustomTooltip />} cursor={CHART_CURSOR} />
+              <Bar dataKey="count" fill="#10b981" radius={BAR_RADIUS} />
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>

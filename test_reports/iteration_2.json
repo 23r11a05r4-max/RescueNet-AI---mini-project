@@ -1,0 +1,32 @@
+{
+  "summary": "Frontend E2E verification post code-review fixes. Auth flow, dashboard (all 7 widgets), navigation, investigations, detail view + status update, reports, and logout all functional. No React key warnings or pageerrors observed. One minor UX issue: New Report modal remained visible briefly after submit though case was successfully created.",
+  "tested_scope": ["frontend", "auth", "integration"],
+  "passed": [
+    "Root / redirects unauthenticated to /login",
+    "Login page renders with demo credential cards; demo-admin fills admin@sentinel.gov",
+    "Login as admin@sentinel.gov/admin123 succeeds and redirects to dashboard",
+    "Dashboard widgets all visible: stats-cards, alert-feed, geo-map, demographic-charts, ai-insights, trend-charts, executive-panel",
+    "AlertFeed filter-Critical clickable",
+    "Nav Command/Investigations/Reports route correctly (Layout phosphor icons render without error)",
+    "Investigations list loads with 25 rows; clicking row navigates to /investigations/:id",
+    "Investigation detail renders with timeline; status-select + update-status executes successfully (toast: 'Status updated')",
+    "New Report modal opens from dashboard new-investigation-btn (navigates to /investigations?new=1)",
+    "Submission created investigation successfully (visible as Test Person case with timeline entry 'report submitted')",
+    "Logout button redirects to /login",
+    "Backend regression: GET /api/analytics/overview returns 200"
+  ],
+  "failed": [
+    {
+      "area": "Investigations - New Report modal",
+      "issue": "Modal did not visibly close immediately after submit_report click (was still visible after 3s wait). However backend accepted the case and it appears in the list. Likely missing onClose call on success or delay before dismissal.",
+      "evidence": "still_open=True after submit; new case 'Test Person' created and visible on detail page",
+      "priority": "LOW"
+    }
+  ],
+  "action_items": [
+    "Consider ensuring New Report modal explicitly closes/dismisses on successful POST /api/investigations response (call setNewOpen(false) or clear ?new=1 query param on success)."
+  ],
+  "success_rate": {"backend": "100% (smoke)", "frontend": "~95% (11/12 checks, 1 minor UX)"},
+  "retest_needed": false,
+  "full_testing_deferred": true
+}

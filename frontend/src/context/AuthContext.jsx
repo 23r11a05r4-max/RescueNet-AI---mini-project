@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { api } from "../lib/api";
 
 const AuthContext = createContext(null);
@@ -16,25 +16,32 @@ export function AuthProvider({ children }) {
       .finally(() => setLoading(false));
   }, []);
 
-  const login = async (email, password) => {
+  const login = useCallback(async (email, password) => {
     const r = await api.post("/auth/login", { email, password });
     localStorage.setItem("sentinel_token", r.data.token);
     setUser(r.data.user);
     return r.data.user;
-  };
-  const register = async (payload) => {
+  }, []);
+
+  const register = useCallback(async (payload) => {
     const r = await api.post("/auth/register", payload);
     localStorage.setItem("sentinel_token", r.data.token);
     setUser(r.data.user);
     return r.data.user;
-  };
-  const logout = () => {
+  }, []);
+
+  const logout = useCallback(() => {
     localStorage.removeItem("sentinel_token");
     setUser(null);
-  };
+  }, []);
+
+  const value = useMemo(
+    () => ({ user, loading, login, register, logout }),
+    [user, loading, login, register, logout],
+  );
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,10 +1,10 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Shield, LayoutDashboard, FileSearch, FileText, LogOut, CircleNotch } from "@phosphor-icons/react";
+import { Shield, GridFour, FileMagnifyingGlass, FileText, SignOut } from "@phosphor-icons/react";
 
 const nav = [
-  { to: "/", label: "Command", icon: LayoutDashboard, testid: "nav-dashboard" },
-  { to: "/investigations", label: "Investigations", icon: FileSearch, testid: "nav-investigations" },
+  { to: "/", label: "Command", icon: GridFour, testid: "nav-dashboard" },
+  { to: "/investigations", label: "Investigations", icon: FileMagnifyingGlass, testid: "nav-investigations" },
   { to: "/reports", label: "Reports", icon: FileText, testid: "nav-reports" },
 ];
 
@@ -49,7 +49,7 @@ export default function Layout({ children }) {
             </div>
             <button data-testid="logout-btn" onClick={() => { logout(); nav_("/login"); }}
               className="p-2 rounded-md text-slate-400 hover:bg-slate-900 hover:text-white transition-colors">
-              <LogOut size={16} />
+              <SignOut size={16} />
             </button>
           </div>
         </div>
