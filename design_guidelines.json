@@ -1,0 +1,109 @@
+{
+  "project_name": "Real-Time Alerts & AI Intelligence Dashboard",
+  "domain": "Law Enforcement & Public Safety",
+  "theme": "Dark",
+  "archetype": "Archetype 2 (Performance Pro / Tactical Command Center)",
+  "design_vision": {
+    "vibe": "Tactical Minimalism. Authority, Mission-Critical Urgency, High Clarity.",
+    "rationale": "For a missing person investigation command center, the UI must reduce cognitive load while highlighting critical real-time alerts. Dark mode (tinted cool grey) reduces eye strain for long monitoring sessions. High-contrast accent colors immediately draw the eye to active AI matches and critical updates. Everything must be actionable within 5 seconds."
+  },
+  "colors": {
+    "background": {
+      "app": "bg-slate-950",
+      "surface": "bg-slate-900",
+      "surface_elevated": "bg-slate-800"
+    },
+    "text": {
+      "primary": "text-white",
+      "secondary": "text-slate-400",
+      "muted": "text-slate-500"
+    },
+    "brand": {
+      "primary": "bg-blue-600 text-white",
+      "primary_hover": "hover:bg-blue-500 hover:text-white",
+      "ai_accent": "text-cyan-400"
+    },
+    "alerts_and_status": {
+      "critical": "border-red-500 bg-red-500/10 text-red-400",
+      "high": "border-orange-500 bg-orange-500/10 text-orange-400",
+      "medium": "border-amber-400 bg-amber-400/10 text-amber-400",
+      "low": "border-slate-500 bg-slate-500/10 text-slate-300",
+      "recovered": "border-emerald-500 bg-emerald-500/10 text-emerald-400"
+    },
+    "borders": {
+      "default": "border-slate-800",
+      "focus": "focus:ring-2 focus:ring-blue-500"
+    }
+  },
+  "typography": {
+    "fonts": {
+      "heading": "font-sans (Configure Tailwind to use 'Chivo' or 'IBM Plex Sans' for headings. NEVER use Inter for headings.)",
+      "body": "font-mono or font-sans (Use 'IBM Plex Sans' or 'Inter' with increased tracking for legibility in data tables.)"
+    },
+    "hierarchy": {
+      "h1": "text-3xl sm:text-4xl tracking-tighter font-bold",
+      "h2": "text-xl sm:text-2xl tracking-tight font-semibold",
+      "h3": "text-lg tracking-tight font-medium",
+      "card_title": "text-sm tracking-[0.1em] uppercase text-slate-400 font-semibold",
+      "metric_value": "text-4xl sm:text-5xl font-black tracking-tighter",
+      "body": "text-sm leading-relaxed",
+      "micro": "text-xs tracking-wider"
+    }
+  },
+  "layout_and_spacing": {
+    "grid_system": "MODE B: THE 'CONTROL ROOM' GRID",
+    "structure": "grid-cols-1 md:grid-cols-3 lg:grid-cols-4 or lg:grid-cols-12 for advanced spanning.",
+    "gap": "gap-4 or gap-6 for high data density.",
+    "containers": "Cardless or flat cards. Use rounded-md (max 8px). Avoid soft shadows. Use 1px solid strokes (border border-slate-800) to separate widgets.",
+    "alignment": "F-Pattern Hierarchy. Most critical metric or active alert feed must be Top-Left. AI Map Top-Right or spanning full width in its own row.",
+    "padding": "Internal padding for widgets should be p-4 or p-6."
+  },
+  "component_strategies": {
+    "navigation": "Sticky top nav or persistent left sidebar. Glassmorphism is BANNED. Use solid bg-slate-950 with a border-b border-slate-800.",
+    "real_time_alert_feed": "Dense list. Left border color indicates priority. Include Timestamp, Priority Badge, ID, and Action. Use staggered entrance animations for new alerts.",
+    "ai_predictive_insights": "Use the 'Terminal/Retro-Futurism' micro-theme. bg-slate-950 with border-cyan-500/30. Add a subtle drop-shadow-[0_0_8px_rgba(34,211,238,0.3)] to the border to signal AI activity.",
+    "metric_cards": "Single-metric focus. Large font for the number, small uppercase overline for the label. Add a tiny sparkline chart (Recharts) in the background or right side.",
+    "map_container": "Use a dark map style (e.g., Mapbox Dark). If using static map placeholders, overlay with bg-slate-950/40 to ensure UI elements on top remain readable.",
+    "charts": "Shadcn Chart components (Recharts). Use the defined alert colors (blue, emerald, cyan) for data lines. Hide grid lines or make them extremely subtle (stroke-slate-800).",
+    "interactive_elements": "ALWAYS explicitly set hover text colors. e.g., hover:bg-slate-800 hover:text-white."
+  },
+  "libraries_and_tools": {
+    "ui_components": "Shadcn UI (Cards, Tables, Badges, Tabs, Dialogs, Select, Dropdown Menu)",
+    "charts": "Recharts (via Shadcn)",
+    "icons": "@phosphor-icons/react (Duotone or Regular weight for tactical density)",
+    "notifications": "Sonner (for real-time toast popups on critical alerts)"
+  },
+  "media": {
+    "avatars": [
+      {
+        "url": "https://images.pexels.com/photos/7714739/pexels-photo-7714739.jpeg",
+        "description": "Female police officer avatar"
+      },
+      {
+        "url": "https://images.pexels.com/photos/7714710/pexels-photo-7714710.jpeg",
+        "description": "Male police officer avatar"
+      },
+      {
+        "url": "https://images.pexels.com/photos/7714669/pexels-photo-7714669.jpeg",
+        "description": "Detective/Investigator avatar"
+      }
+    ],
+    "logos_and_badges": [
+      {
+        "url": "https://images.pexels.com/photos/6357596/pexels-photo-6357596.jpeg",
+        "description": "Law Enforcement Agency Badge / Logo Placeholder"
+      }
+    ],
+    "map_texture_fallback": [
+      {
+        "url": "https://images.pexels.com/photos/6288284/pexels-photo-6288284.jpeg",
+        "description": "City map topology placeholder for background maps if no active map library is used"
+      }
+    ]
+  },
+  "testing_and_accessibility": {
+    "data_testid": "CRITICAL: All interactive elements, alerts, metric cards, and charts MUST include a `data-testid` attribute using kebab-case role-based naming (e.g., `data-testid=\"alert-feed-item-critical\"`, `data-testid=\"ai-match-button\"`).",
+    "contrast": "Ensure text against colored badges maintains a 4.5:1 ratio. For Critical red badges, use text-red-100 or text-white on pure red, or text-red-400 on dark red backgrounds.",
+    "motion": "Respect prefers-reduced-motion. New alerts sliding in must be quick and snappy (e.g., transition: transform 0.2s ease, opacity 0.2s ease)."
+  }
+}
