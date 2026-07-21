@@ -1,0 +1,75 @@
+MISSING CHILD RESPONSE STANDARD OPERATING PROCEDURE (SOP)
+
+Version: 1.0
+Organization: RescueNet-AI Command Center
+
+1. Objective
+Provide a standardized response for missing child incidents.
+
+2. Immediate Response
+- Register complaint immediately.
+- Generate unique Case ID.
+- Assign status: OPEN.
+- Notify nearest police station.
+- Record child and guardian details.
+
+3. Risk Priority
+CRITICAL:
+- Child below 10 years
+- Kidnapping suspected
+- Medical emergency
+- Human trafficking suspicion
+
+HIGH:
+- Missing > 6 hours
+- Public crowded area
+
+MEDIUM:
+- Missing < 6 hours
+- No immediate danger
+
+LOW:
+- Voluntary absence suspected
+
+4. Investigation Workflow
+1. Verify complaint
+2. Geocode address
+3. Search CCTV
+4. AI Face Recognition
+5. Notify Police & NGOs
+6. Broadcast Alerts
+7. Update Dashboard
+
+5. Case Status
+OPEN
+IN_PROGRESS
+RECOVERED
+CLOSED
+
+6. Dashboard Metrics
+- Total Cases
+- Open Cases
+- Investigation Cases
+- Recovered Cases
+- Closed Cases
+
+7. AI Modules
+- Face Recognition
+- Risk Prediction
+- RAG Knowledge Base
+- Multilingual Chatbot
+- Speech-to-Text
+- Text-to-Speech
+- Geospatial Analytics
+
+8. Emergency Numbers
+Police: 100
+Child Helpline: 1098
+
+9. Citizen Guidelines
+Upload a recent photo.
+Provide accurate address.
+Mention last seen location.
+Keep contact number active.
+
+End of Document.

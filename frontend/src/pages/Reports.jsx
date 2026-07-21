@@ -8,8 +8,23 @@ export default function Reports() {
   const [invs, setInvs] = useState([]);
 
   useEffect(() => {
-    api.get("/reports/summary").then(r => setSummary(r.data));
-    api.get("/investigations", { params: { limit: 100 } }).then(r => setInvs(r.data));
+    const fetchData = async () => {
+      try {
+        const r = await api.get("/reports/summary");
+        setSummary(r.data);
+      } catch (err) {
+        console.error("Failed to load intelligence summary:", err);
+        toast.error("Failed to load intelligence summary report. Please check API server.");
+      }
+      try {
+        const r = await api.get("/investigations", { params: { limit: 100 } });
+        setInvs(r.data || []);
+      } catch (err) {
+        console.error("Failed to load cases directory:", err);
+        toast.error("Failed to load investigations directory.");
+      }
+    };
+    fetchData();
   }, []);
 
   const download = (path, fname) => {
@@ -82,7 +97,18 @@ export default function Reports() {
                 <td className="px-4 py-3 text-xs uppercase tracking-wider text-slate-400">{i.status.replace("_"," ")}</td>
                 <td className="px-4 py-3 text-right">
                   <button data-testid={`dl-case-csv-${i.id}`} onClick={() => download(`/reports/investigation/${i.id}?fmt=csv`, `case_${i.id.slice(0,8)}.csv`)} className="text-xs text-blue-400 hover:text-blue-300 mr-3 inline-flex items-center gap-1"><DownloadSimple size={12}/> CSV</button>
-                  <button data-testid={`dl-case-json-${i.id}`} onClick={() => api.get(`/reports/investigation/${i.id}`).then(r => jsonDl(r.data, `case_${i.id.slice(0,8)}.json`))} className="text-xs text-blue-400 hover:text-blue-300 inline-flex items-center gap-1"><DownloadSimple size={12}/> JSON</button>
+                  <button data-testid={`dl-case-json-${i.id}`}
+                    onClick={async () => {
+                      try {
+                        const r = await api.get(`/reports/investigation/${i.id}`);
+                        jsonDl(r.data, `case_${i.id.slice(0,8)}.json`);
+                      } catch (err) {
+                        toast.error("Failed to export case report as JSON.");
+                      }
+                    }}
+                    className="text-xs text-blue-400 hover:text-blue-300 inline-flex items-center gap-1">
+                    <DownloadSimple size={12}/> JSON
+                  </button>
                 </td>
               </tr>
             ))}

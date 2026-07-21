@@ -43,7 +43,7 @@ export default function GeoMap({ data }) {
               attribution='&copy; OpenStreetMap contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {points.map(p => (
+            {points.filter(p => p.lat && p.lng && p.lat !== 0 && p.lng !== 0).map(p => (
               <CircleMarker key={p.id} center={[p.lat, p.lng]} radius={7}
                 pathOptions={buildPointPath(p.status, p.priority)}>
                 <Popup>
